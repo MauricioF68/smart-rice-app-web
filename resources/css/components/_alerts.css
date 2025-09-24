@@ -1,0 +1,19 @@
+/* ==========================================================================
+   COMPONENTE: ALERTAS
+   ========================================================================== */
+
+.alert {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radio-borde);
+    color: var(--color-texto-claro);
+    font-weight: 700;
+}
+
+.alert--success {
+    background-color: var(--color-exito);
+}
+
+.alert--error {
+    background-color: var(--color-error);
+}
