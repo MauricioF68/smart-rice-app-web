@@ -43,9 +43,12 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="{{ route('preventas.show', $preventa) }}" class="text-indigo-600 hover:text-indigo-900">Ver</a>
-                                        {{-- LÓGICA DE NEGOCIO: Solo mostrar si no hay propuestas --}}
-                                        {{-- @if($preventa->propuestas()->doesntExist()) --}}
+
+                                        {{-- LÓGICA DE NEGOCIO: Solo mostrar si la preventa sigue activa --}}
+                                        @if($preventa->estado === 'activa')
+
                                         <a href="{{ route('preventas.edit', $preventa) }}" class="text-yellow-600 hover:text-yellow-900 ml-4">Editar</a>
+
                                         <form action="{{ route('preventas.destroy', $preventa) }}" method="POST" class="inline-block ml-4" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta preventa?');">
                                             @csrf
                                             @method('DELETE')
@@ -53,9 +56,8 @@
                                                 Eliminar
                                             </button>
                                         </form>
-                                        {{-- @else --}}
-                                        {{-- <span class="ml-4 text-gray-400 italic">En negociación</span> --}}
-                                        {{-- @endif --}}
+
+                                        @endif
                                     </td>
                                 </tr>
                                 @empty

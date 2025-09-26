@@ -1,8 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{-- Usamos el ID para un título dinámico --}}
-            {{ __('Detalle de la Preventa PV-' . $preventa->id) }}
+            {{ __('Gestionar Negociación: Preventa PV-' . $preventa->id) }}
         </h2>
     </x-slot>
 
@@ -11,45 +10,66 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                    {{-- Botón para volver al listado --}}
-                    <a href="{{ route('preventas.index') }}" class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 mb-6 inline-block">
-                        <i class="fas fa-arrow-left"></i>
-                        Volver al listado
-                    </a>
-
-                    {{-- Contenido del Detalle --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {{-- Columna de Datos de la Oferta --}}
-                        <div class="space-y-4">
+                    {{-- Resumen de la Preventa --}}
+                    <div class="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-2">Tu Oferta Original</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                             <div>
-                                <h3 class="font-bold text-lg">Datos de la Oferta</h3>
-                                <p><strong>Cantidad de Sacos:</strong> {{ $preventa->cantidad_sacos }}</p>
-                                <p><strong>Precio por Saco:</strong> S/ {{ number_format($preventa->precio_por_saco, 2) }}</p>
-                                <p><strong>Estado:</strong> <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">{{ ucfirst($preventa->estado) }}</span></p>
-                                <p><strong>Fecha de Publicación:</strong> {{ $preventa->created_at->format('d/m/Y H:i') }}</p>
+                                <p class="text-sm text-gray-500">Sacos Ofertados</p>
+                                <p class="text-xl font-bold">{{ $preventa->cantidad_sacos }}</p>
                             </div>
                             <div>
-                                <h3 class="font-bold text-lg">Parámetros de Calidad</h3>
-                                <p><strong>Humedad:</strong> {{ $preventa->humedad }}%</p>
-                                <p><strong>Quebrado:</strong> {{ $preventa->quebrado }}%</p>
+                                <p class="text-sm text-gray-500">Precio Sugerido</p>
+                                <p class="text-xl font-bold">S/ {{ number_format($preventa->precio_por_saco, 2) }}</p>
                             </div>
-                            @if($preventa->notas)
                             <div>
-                                <h3 class="font-bold text-lg">Notas Adicionales</h3>
-                                <p class="whitespace-pre-wrap">{{ $preventa->notas }}</p>
+                                <p class="text-sm text-gray-500">Humedad</p>
+                                <p class="text-xl font-bold">{{ $preventa->humedad }}%</p>
                             </div>
-                            @endif
-                        </div>
-
-                        {{-- Columna de Propuestas (Placeholder) --}}
-                        <div class="space-y-4">
-                             <h3 class="font-bold text-lg">Propuestas Recibidas</h3>
-                             <div class="border border-gray-200 dark:border-gray-700 rounded-md p-4">
-                                <p class="text-gray-500 italic">Aquí se mostrará la lista de propuestas de los molinos cuando implementemos esa funcionalidad.</p>
-                             </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Estado</p>
+                                <p class="text-xl font-bold capitalize">{{ $preventa->estado }}</p>
+                            </div>
                         </div>
                     </div>
 
+                    {{-- Lista de Propuestas Recibidas --}}
+                    <div>
+                        <h3 class="font-bold text-lg mb-4">Propuestas de los Molinos</h3>
+                        <div class="space-y-4">
+                            @forelse ($preventa->propuestas as $propuesta)
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 flex justify-between items-center">
+                                {{-- Detalles de la propuesta --}}
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-gray-200">{{ $propuesta->user->name }}</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                                        Propuesta: <strong>{{ $propuesta->cantidad_sacos_propuesta }}</strong> sacos a
+                                        <strong>S/ {{ number_format($propuesta->precio_por_saco_propuesta, 2) }}</strong> c/u
+                                    </p>
+                                </div>
+
+                                {{-- Botones de Acción (solo si la preventa sigue activa) --}}
+                                @if ($preventa->estado === 'activa')
+                                <div class="flex items-center">
+                                    <form action="{{ route('propuestas.reject', $propuesta) }}" method="POST" class="inline">
+                                        @csrf
+                                        <x-secondary-button type="submit">Rechazar</x-secondary-button>
+                                    </form>
+
+                                    <form action="{{ route('propuestas.accept', $propuesta) }}" method="POST" class="inline ml-2" onsubmit="return confirm('¿Estás seguro de que deseas cerrar el trato con este molino? Esta acción es final.');">
+                                        @csrf
+                                        <x-primary-button type="submit">Cerrar Trato</x-primary-button>
+                                    </form>
+                                </div>
+                                @endif
+                            </div>
+                            @empty
+                            <div class="text-center py-8">
+                                <p class="text-gray-500 italic">Esta preventa aún no ha recibido ninguna propuesta.</p>
+                            </div>
+                            @endforelse
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,6 @@
 @import "components/_alerts.css";
+@import "components/_modal.css";
+@import "components/_sidebar.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
