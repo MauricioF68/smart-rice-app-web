@@ -19,6 +19,17 @@ class PreventaController extends Controller
         // 2. Devolver la vista y pasarle los datos
         return view('preventas.index', compact('preventas'));
     }
+    /**
+     * Muestra todas las preventas activas a los molinos (El Mercado).
+     */
+    public function mercado()
+    {
+        // Usamos el namespace completo para asegurar que encuentre el modelo
+        $preventas = \App\Models\Preventa::where('estado', 'activa')->latest()->get();
+
+        // Devolvemos la vista que creamos
+        return view('molino.preventas.index', compact('preventas'));
+    }
 
     /**
      * Muestra el formulario para crear una nueva preventa.
@@ -47,10 +58,14 @@ class PreventaController extends Controller
         return redirect()->route('preventas.index')->with('status', '¡Preventa creada exitosamente!');
     }
 
-   
+
+  
     public function show(Preventa $preventa)
     {
-        // Devuelve la vista de detalle y le pasa la preventa encontrada
+        // Cargar la preventa junto con sus propuestas
+        // y para cada propuesta, cargar la información del usuario (molino) que la hizo.
+        $preventa->load('propuestas.user');
+
         return view('preventas.show', compact('preventa'));
     }
 
@@ -60,9 +75,9 @@ class PreventaController extends Controller
     public function edit(Preventa $preventa)
     {
         // LÓGICA DE NEGOCIO: Si la preventa tiene propuestas, no se puede editar.
-        // if ($preventa->propuestas()->exists()) {
-        //     return redirect()->route('preventas.index')->with('status', 'Error: No se puede editar una preventa que ya está en negociación.');
-        // }
+        if ($preventa->propuestas()->exists()) {
+            return redirect()->route('preventas.index')->with('status', 'Error: No se puede editar una preventa que ya está en negociación.');
+        }
         return view('preventas.edit', compact('preventa'));
     }
 
@@ -87,12 +102,35 @@ class PreventaController extends Controller
     public function destroy(Preventa $preventa)
     {
         // LÓGICA DE NEGOCIO: Si la preventa tiene propuestas, no se puede eliminar.
-        // if ($preventa->propuestas()->exists()) {
-        //     return redirect()->route('preventas.index')->with('status', 'Error: No se puede eliminar una preventa que ya está en negociación.');
-        // }
+        if ($preventa->propuestas()->exists()) {
+            return redirect()->route('preventas.index')->with('status', 'Error: No se puede eliminar una preventa que ya está en negociación.');
+        }
 
         $preventa->delete();
 
         return redirect()->route('preventas.index')->with('status', '¡Preventa eliminada exitosamente!');
+    }
+
+    public function accept(Preventa $preventa)
+    {
+        // Lógica de negocio: Asegurarse de que la preventa todavía esté activa
+        if ($preventa->estado !== 'activa') {
+            return back()->with('status', 'Error: Esta oferta ya no está disponible.');
+        }
+
+        // 1. Crear una propuesta con los mismos términos para formalizar
+        $preventa->propuestas()->create([
+            'user_id' => auth()->id(), // El ID del molino que acepta
+            'cantidad_sacos_propuesta' => $preventa->cantidad_sacos,
+            'precio_por_saco_propuesta' => $preventa->precio_por_saco,
+            'estado' => 'aceptada',
+        ]);
+
+        // 2. Actualizar el estado de la preventa a 'acordada'
+        $preventa->estado = 'acordada';
+        $preventa->save();
+
+        // 3. Redirigir con un mensaje de éxito
+        return redirect()->route('mercado.index')->with('status', '¡Oferta aceptada exitosamente!');
     }
 }
