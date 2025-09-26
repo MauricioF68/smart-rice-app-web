@@ -33,4 +33,9 @@ class Preventa extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    public function propuestas()
+    {
+        return $this->hasMany(\App\Models\Propuesta::class);
+    }
 }

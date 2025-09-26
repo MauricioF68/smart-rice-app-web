@@ -1,0 +1,57 @@
+/* ==========================================================================
+   COMPONENTE: SIDEBAR
+   ========================================================================== */
+
+.sidebar {
+    width: 260px; /* Ancho del menú lateral */
+    background-color: #1f2937; /* Un color oscuro de Tailwind para el fondo */
+    color: #d1d5db; /* Texto gris claro */
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0; /* Evita que se encoja */
+}
+
+.sidebar__logo {
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid #374151; /* Borde sutil */
+}
+
+.sidebar__logo img {
+    max-width: 150px;
+    margin: 0 auto;
+}
+
+.sidebar__nav ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+.sidebar__nav a {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.5rem;
+    color: #d1d5db; /* Texto gris claro */
+    font-weight: 600;
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar__nav a:hover {
+    background-color: #374151; /* Un gris más oscuro al pasar el mouse */
+    color: #ffffff; /* Texto blanco */
+}
+
+/* ESTILO PARA EL ENLACE ACTIVO */
+.sidebar__nav a.active {
+    background-color: #111827; /* Fondo casi negro */
+    color: #ffffff; /* Texto blanco */
+    border-left-color: #4f46e5; /* Acento índigo de Tailwind */
+}
+
+.sidebar__nav a i {
+    margin-right: 1rem;
+    width: 20px; /* Ancho fijo para los íconos */
+    text-align: center;
+}
