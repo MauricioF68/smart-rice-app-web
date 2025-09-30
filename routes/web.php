@@ -4,6 +4,8 @@ use App\Models\Preventa;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PreventaController;
 use App\Http\Controllers\PropuestaController;
+use App\Http\Controllers\CampanaController;
+use App\Http\Controllers\Admin\TipoArrozController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -62,6 +64,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('propuestas/{propuesta}/aceptar', [PropuestaController::class, 'accept'])->name('propuestas.accept');
     Route::post('propuestas/{propuesta}/rechazar', [PropuestaController::class, 'reject'])->name('propuestas.reject');
+
+    Route::resource('campanas', CampanaController::class);
+
+    Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('tipos-arroz', TipoArrozController::class);
+});
+    
 });
 
 require __DIR__ . '/auth.php';
