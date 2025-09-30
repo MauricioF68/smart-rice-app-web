@@ -85,3 +85,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// =======================================================
+// ===== LÓGICA PARA EL MODAL DE DETALLE DE CAMPAÑA =====
+// =======================================================
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const campaignModal = document.getElementById('campaignDetailModal');
+    if (!campaignModal) return;
+
+    // --- FUNCIÓN PARA ABRIR EL MODAL DE DETALLE DE CAMPAÑA ---
+    window.openCampaignDetailModal = function(campanaString) {
+        const campana = JSON.parse(campanaString);
+
+        // Rellenar los campos del modal
+        document.getElementById('modal-campaign-title').textContent = `Detalle: ${campana.nombre_campana}`;
+        document.getElementById('modal-campaign-total').textContent = campana.cantidad_total;
+        document.getElementById('modal-campaign-progress').textContent = campana.cantidad_acordada;
+        document.getElementById('modal-campaign-price').textContent = `S/ ${parseFloat(campana.precio_base).toFixed(2)}`;
+        document.getElementById('modal-campaign-status').textContent = campana.estado;
+        document.getElementById('modal-campaign-humidity').textContent = `${campana.humedad_min || 'N/A'}% - ${campana.humedad_max || 'N/A'}%`;
+        document.getElementById('modal-campaign-breakage').textContent = `${campana.quebrado_min || 'N/A'}% - ${campana.quebrado_max || 'N/A'}%`;
+        document.getElementById('modal-campaign-min').textContent = campana.min_sacos_por_agricultor || 'N/A';
+        document.getElementById('modal-campaign-max').textContent = campana.max_sacos_por_agricultor || 'N/A';
+
+        campaignModal.classList.remove('hidden');
+        campaignModal.classList.add('flex');
+    }
+
+    // --- FUNCIÓN PARA CERRAR EL MODAL ---
+    window.closeCampaignDetailModal = function() {
+        campaignModal.classList.add('hidden');
+        campaignModal.classList.remove('flex');
+    }
+});
