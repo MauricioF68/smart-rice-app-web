@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Preventa;
+use App\Models\Lote;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePreventaRequest;
 
@@ -19,13 +20,14 @@ class PreventaController extends Controller
         // 2. Devolver la vista y pasarle los datos
         return view('preventas.index', compact('preventas'));
     }
-    /**
-     * Muestra todas las preventas activas a los molinos (El Mercado).
-     */
+
     public function mercado()
     {
-        // Usamos el namespace completo para asegurar que encuentre el modelo
-        $preventas = \App\Models\Preventa::where('estado', 'activa')->latest()->get();
+        // Modificamos la consulta para incluir las relaciones con 'user', 'lote' y 'lote.tipoArroz'
+        $preventas = \App\Models\Preventa::with(['user', 'lote.tipoArroz'])
+            ->where('estado', 'activa')
+            ->latest()
+            ->get();
 
         // Devolvemos la vista que creamos
         return view('molino.preventas.index', compact('preventas'));
@@ -36,8 +38,14 @@ class PreventaController extends Controller
      */
     public function create()
     {
-        // 3. Simplemente muestra la vista del formulario de creación
-        return view('preventas.create');
+        // 1. Buscamos los lotes disponibles del agricultor que ha iniciado sesión
+        $lotesDisponibles = Lote::where('user_id', auth()->id())
+            ->where('estado', 'disponible')
+            ->where('cantidad_disponible_sacos', '>', 0)
+            ->get();
+
+        // 2. Pasamos los lotes a la vista
+        return view('preventas.create', compact('lotesDisponibles'));
     }
 
     /**
@@ -45,21 +53,35 @@ class PreventaController extends Controller
      */
     public function store(StorePreventaRequest $request)
     {
-        // 1. Obtiene los datos ya validados por StorePreventaRequest
+        // 1. Obtiene los datos ya validados (necesitaremos añadir 'lote_id')
         $datosValidados = $request->validated();
 
-        // 2. Añade el ID del usuario autenticado a los datos
-        $datosValidados['user_id'] = auth()->id();
+        // 2. Buscamos el lote seleccionado para obtener sus datos
+        $loteSeleccionado = Lote::where('id', $datosValidados['lote_id'])
+            ->where('user_id', auth()->id()) // Seguridad: asegurar que el lote es del usuario
+            ->firstOrFail(); // Falla si no lo encuentra
 
-        // 3. Crea la preventa en la base de datos
-        Preventa::create($datosValidados);
+        // 3. Preparamos los datos para crear la preventa
+        $datosPreventa = [
+            'user_id' => auth()->id(),
+            'lote_id' => $loteSeleccionado->id,
+            'precio_por_saco' => $datosValidados['precio_por_saco'],
+            'notas' => $datosValidados['notas'] ?? null,
+            // --- Datos tomados directamente del lote ---
+            'cantidad_sacos' => $loteSeleccionado->cantidad_disponible_sacos,
+            'humedad' => $loteSeleccionado->humedad,
+            'quebrado' => $loteSeleccionado->quebrado,
+        ];
 
-        // 4. Redirige al listado con un mensaje de éxito
-        return redirect()->route('preventas.index')->with('status', '¡Preventa creada exitosamente!');
+        // 4. Crea la preventa en la base de datos
+        Preventa::create($datosPreventa);
+
+        // 5. Redirige al listado con un mensaje de éxito
+        return redirect()->route('preventas.index')->with('status', '¡Preventa creada exitosamente usando los datos de tu lote!');
     }
 
 
-  
+
     public function show(Preventa $preventa)
     {
         // Cargar la preventa junto con sus propuestas
@@ -70,7 +92,7 @@ class PreventaController extends Controller
     }
 
     /**
-     * Muestra el formulario para editar una preventa.
+     * Muestra el formulario para editar una preventa .
      */
     public function edit(Preventa $preventa)
     {
@@ -132,5 +154,36 @@ class PreventaController extends Controller
 
         // 3. Redirigir con un mensaje de éxito
         return redirect()->route('mercado.index')->with('status', '¡Oferta aceptada exitosamente!');
+    }
+
+    public function negociaciones()
+    {
+        // 1. Buscamos todas las preventas del agricultor que tengan al menos una propuesta.
+        // Usamos 'with' para cargar eficientemente todas las relaciones que necesitaremos en la vista.
+        $preventasConPropuestas = Preventa::where('user_id', auth()->id())
+            ->has('propuestas') // Solo trae preventas que tienen propuestas
+            ->with(['propuestas' => function ($query) {
+                // Carga las propuestas y, para cada una, el usuario (molino) que la hizo.
+                $query->with('user')->orderBy('created_at', 'desc');
+            }, 'lote.tipoArroz']) // Carga también el lote y su tipo de arroz
+            ->latest()
+            ->get();
+
+        // 2. Separamos las propuestas en dos colecciones: pendientes y acordadas.
+        $propuestasPendientes = collect();
+        $propuestasAcordadas = collect();
+
+        foreach ($preventasConPropuestas as $preventa) {
+            foreach ($preventa->propuestas as $propuesta) {
+                if ($propuesta->estado === 'pendiente') {
+                    $propuestasPendientes->push($propuesta);
+                } elseif ($propuesta->estado === 'aceptada') {
+                    $propuestasAcordadas->push($propuesta);
+                }
+            }
+        }
+
+        // 3. Devolvemos la vista con las dos colecciones de datos.
+        return view('preventas.negociaciones', compact('propuestasPendientes', 'propuestasAcordadas'));
     }
 }

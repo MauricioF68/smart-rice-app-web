@@ -79,7 +79,7 @@
                         <h3 class="text-lg font-bold mt-6 mb-4 border-b pb-2">Opciones de Marketing (Opcional)</h3>
                         <div>
                             <x-input-label for="cantidad_acordada" value="Iniciar campaña con (sacos ya comprados)" />
-                            <x-text-input id="cantidad_acordada" class="block mt-1 w-full" type="number" name="cantidad_acordada" :value="old('cantidad_acordada', 0)" />
+                            <x-text-input id="cantidad_acordada" class="block mt-1 w-full" type="number" name="cantidad_acordada" :value="old('cantidad_acordada', 0)" disabled />
                             <p class="mt-2 text-sm text-gray-500">Usa esto para crear urgencia. El valor real se sumará a este número.</p>
                         </div>
 
@@ -87,7 +87,7 @@
                         <div class="flex items-center justify-end mt-6">
                             <a href="{{ route('campanas.index') }}" class="text-sm text-gray-600">Cancelar</a>
                             <x-primary-button class="ms-4">
-                                Actualizar Campaña
+                                {{ __('Actualizar Campaña') }}
                             </x-primary-button>
                         </div>
                     </form>

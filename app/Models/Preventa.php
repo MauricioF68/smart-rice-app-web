@@ -33,6 +33,11 @@ class Preventa extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function lote()
+    {
+        return $this->belongsTo(\App\Models\Lote::class);
+    }
     
     public function propuestas()
     {

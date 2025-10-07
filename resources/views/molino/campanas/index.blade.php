@@ -33,22 +33,18 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $campana->nombre_campana }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $campana->cantidad_acordada }} / {{ $campana->cantidad_total }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">{{ ucfirst($campana->estado) }}</span></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button class="text-indigo-600 hover:text-indigo-900" onclick="openCampaignDetailModal('{{ json_encode($campana) }}')">
-                                            Ver
-                                        </button>
-                                        {{-- Lógica de Negocio: Solo mostrar si no hay progreso --}}
-                                        @if($campana->cantidad_acordada == 0)
-                                        <a href="{{ route('campanas.edit', $campana) }}" class="text-yellow-600 hover:text-yellow-900 ml-4">Editar</a>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="{{ route('campanas.aplicaciones', $campana) }}" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                            Ver Aplicaciones
+                                        </a>
 
-                                        <form action="{{ route('campanas.destroy', $campana) }}" method="POST" class="inline-block ml-4" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta campaña?');">
+                                        <a href="{{ route('campanas.edit', $campana) }}" class="text-indigo-600 hover:text-indigo-900 ml-4">Editar</a>
+
+                                        <form action="{{ route('campanas.destroy', $campana) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900">
-                                                Eliminar
-                                            </button>
+                                            <button type="submit" class="text-red-600 hover:text-red-900 ml-4">Eliminar</button>
                                         </form>
-                                        @endif
                                     </td>
                                 </tr>
                                 @empty

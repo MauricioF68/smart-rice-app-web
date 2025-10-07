@@ -4,6 +4,7 @@ use App\Models\Preventa;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PreventaController;
 use App\Http\Controllers\PropuestaController;
+use App\Http\Controllers\LoteController;
 use App\Http\Controllers\CampanaController;
 use App\Http\Controllers\Admin\TipoArrozController;
 use Illuminate\Support\Facades\Route;
@@ -65,10 +66,23 @@ Route::middleware('auth')->group(function () {
     Route::post('propuestas/{propuesta}/aceptar', [PropuestaController::class, 'accept'])->name('propuestas.accept');
     Route::post('propuestas/{propuesta}/rechazar', [PropuestaController::class, 'reject'])->name('propuestas.reject');
 
+    Route::get('/mis-negociaciones', [PreventaController::class, 'negociaciones'])->name('preventas.negociaciones');
+
     Route::resource('campanas', CampanaController::class);
+    Route::resource('lotes', LoteController::class);
+
+    Route::get('/campanas-mercado', [CampanaController::class, 'mercadoParaAgricultores'])->name('campanas.mercado');
+    Route::get('/mercado-campanas', [CampanaController::class, 'mercadoParaAgricultores'])->name('campanas.mercado');
+
+    Route::get('campanas/{campana}/aplicaciones', [CampanaController::class, 'verAplicaciones'])->name('campanas.aplicaciones');
+    Route::post('aplicaciones/{aplicacion}/aprobar', [CampanaController::class, 'aprobarAplicacion'])->name('aplicaciones.aprobar');
+    Route::post('aplicaciones/{aplicacion}/rechazar', [CampanaController::class, 'rechazarAplicacion'])->name('aplicaciones.rechazar');
+    Route::post('/campanas/{campana}/aplicar', [CampanaController::class, 'aplicar'])->name('campanas.aplicar');
 
     Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('tipos-arroz', TipoArrozController::class);
+
+    
 });
     
 });
