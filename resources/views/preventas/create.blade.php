@@ -9,35 +9,34 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <p class="mb-6">Completa la información a continuación para publicar tu oferta de arroz en el mercado.</p>
+                    <p class="mb-6">Selecciona uno de tus lotes disponibles y define el precio para publicarlo en el mercado.</p>
 
                     <form method="POST" action="{{ route('preventas.store') }}">
                         @csrf
 
                         <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <x-input-label for="cantidad_sacos" :value="__('Cantidad de Sacos (Aprox.)')" />
-                                <x-text-input id="cantidad_sacos" class="block mt-1 w-full" type="number" name="cantidad_sacos" :value="old('cantidad_sacos')" required />
-                                <x-input-error :messages="$errors->get('cantidad_sacos')" class="mt-2" />
+
+                            <div class="col-span-2">
+                                <x-input-label for="lote_id" :value="__('Selecciona el Lote a Vender')" />
+                                <select name="lote_id" id="lote_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
+                                    <option value="">-- Elige un lote --</option>
+                                    @forelse ($lotesDisponibles as $lote)
+                                        <option value="{{ $lote->id }}" @selected(old('lote_id') == $lote->id)>
+                                            {{ $lote->nombre_lote }} ({{ $lote->cantidad_disponible_sacos }} sacos disponibles | Humedad: {{ $lote->humedad }}% | Quebrado: {{ $lote->quebrado }}%)
+                                        </option>
+                                    @empty
+                                        <option value="" disabled>No tienes lotes disponibles para la venta.</option>
+                                    @endforelse
+                                </select>
+                                <x-input-error :messages="$errors->get('lote_id')" class="mt-2" />
                             </div>
 
-                            <div>
+                            <div class="col-span-2">
                                 <x-input-label for="precio_por_saco" :value="__('Precio Sugerido por Saco (S/)')" />
                                 <x-text-input id="precio_por_saco" class="block mt-1 w-full" type="number" name="precio_por_saco" step="0.01" :value="old('precio_por_saco')" required />
                                 <x-input-error :messages="$errors->get('precio_por_saco')" class="mt-2" />
                             </div>
 
-                             <div>
-                                <x-input-label for="humedad" :value="__('Humedad (%)')" />
-                                <x-text-input id="humedad" class="block mt-1 w-full" type="number" name="humedad" step="0.1" :value="old('humedad')" required />
-                                <x-input-error :messages="$errors->get('humedad')" class="mt-2" />
-                            </div>
-
-                            <div>
-                                <x-input-label for="quebrado" :value="__('Quebrado (%)')" />
-                                <x-text-input id="quebrado" class="block mt-1 w-full" type="number" name="quebrado" step="0.1" :value="old('quebrado')" required />
-                                <x-input-error :messages="$errors->get('quebrado')" class="mt-2" />
-                            </div>
                         </div>
                         
                         <div class="mt-6">

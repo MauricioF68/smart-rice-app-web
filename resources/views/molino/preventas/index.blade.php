@@ -32,8 +32,8 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             {{-- Este botón ahora pasará el objeto completo de la preventa al JavaScript --}}
                                             <button class="text-indigo-600 hover:text-indigo-900 font-bold" onclick="openProposalModal('{{ json_encode($preventa) }}')">
-                                                Ver y Ofertar
-                                            </button>
+                                                Ver y Ofertr
+                                            </button>                                           
                                         </td>
                                     </tr>
                                 @empty

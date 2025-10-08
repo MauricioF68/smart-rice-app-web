@@ -23,11 +23,10 @@ class StorePreventaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cantidad_sacos' => ['required', 'integer', 'min:1'],
+            
+            'lote_id' => ['required', 'integer', 'exists:lotes,id'],
             'precio_por_saco' => ['required', 'numeric', 'min:0'],
-            'humedad' => ['required', 'numeric', 'min:0'],
-            'quebrado' => ['required', 'numeric', 'min:0'],
-            'notas' => ['nullable', 'string'],
+            'notas' => ['nullable', 'string', 'max:500'],
         ];
     }
 }
