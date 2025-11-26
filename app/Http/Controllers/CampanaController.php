@@ -63,16 +63,20 @@ class CampanaController extends Controller
     {
         //
     }
+
     public function edit(Campana $campana)
     {
-        // Lógica de Negocio: No se puede editar si ya hay sacos acordados.
-        if ($campana->cantidad_acordada > 0) {
-            return redirect()->route('campanas.index')->with('status', 'Error: No se puede editar una campaña que ya tiene agricultores participantes.');
-        }
+        
+        $tieneParticipantes = \App\Models\CampanaLote::where('campana_id', $campana->id)->exists();
 
+        if ($tieneParticipantes) {
+         
+            return redirect()->route('campanas.index')->with('status', 'Error: No se puede editar. Ya hay agricultores participando en esta campaña.');
+        }
+       
         $tiposArroz = TipoArroz::orderBy('nombre')->get();
         return view('molino.campanas.edit', compact('campana', 'tiposArroz'));
-    }
+    }    
 
     /**
      * Update the specified resource in storage.
@@ -83,40 +87,43 @@ class CampanaController extends Controller
 
         return redirect()->route('campanas.index')->with('status', '¡Campaña actualizada exitosamente!');
     }
-    public function destroy(Campana $campana)
-    {
-        // Regla de Negocio: No se puede eliminar si ya hay sacos acordados.
-        if ($campana->cantidad_acordada > 0) {
-            return redirect()->route('campanas.index')->with('status', 'Error: No se puede eliminar una campaña que ya tiene agricultores participantes.');
-        }
 
+    public function destroy(Campana $campana)
+    {        
+        $tieneParticipantes = \App\Models\CampanaLote::where('campana_id', $campana->id)->exists();
+        
+        if ($tieneParticipantes) {
+            return redirect()->route('campanas.index')
+                ->with('status', 'Error: No se puede eliminar esta campaña porque ya tiene agricultores participantes.');
+        }        
         $campana->delete();
 
-        return redirect()->route('campanas.index')->with('status', '¡Campaña eliminada exitosamente!');
-    }
+        return redirect()->route('campanas.index')
+            ->with('status', '¡Campaña eliminada exitosamente!');
+        }
 
     public function mercadoParaAgricultores()
     {
-        // 1. Obtener los lotes disponibles del agricultor que ha iniciado sesión
+       
         $lotesDisponibles = Lote::where('user_id', auth()->id())
             ->where('estado', 'disponible')
             ->get();
 
-        // 2. Obtener todas las campañas activas de los molinos
+       
         $campanasActivas = Campana::where('estado', 'activa')->with('user')->latest()->get();
 
-        // 3. Lógica de "Matchmaking": Añadir lotes compatibles a cada campaña
+        
         foreach ($campanasActivas as $campana) {
             $campana->lotes_compatibles = collect();
             foreach ($lotesDisponibles as $lote) {
-                // Aquí se aplican los filtros de compatibilidad
+               
                 if (($campana->tipo_arroz_id && $lote->tipo_arroz_id != $campana->tipo_arroz_id) ||
                     ($campana->humedad_min && $lote->humedad < $campana->humedad_min) ||
                     ($campana->humedad_max && $lote->humedad > $campana->humedad_max) ||
                     ($campana->quebrado_min && $lote->quebrado < $campana->quebrado_min) ||
                     ($campana->quebrado_max && $lote->quebrado > $campana->quebrado_max)
                 ) {
-                    continue; // Si no cumple, se salta al siguiente lote
+                    continue; 
                 }
                 // Si cumple, se añade a la lista de compatibles de la campaña
                 $campana->lotes_compatibles->push($lote);

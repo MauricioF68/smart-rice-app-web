@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// =======================================================
+/*/ =======================================================
 // ===== LÓGICA PARA EL MODAL DE DETALLE DE CAMPAÑA =====
 // =======================================================
 document.addEventListener("DOMContentLoaded", function () {
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "modal-campaign-title"
         ).textContent = `Detalle: ${campana.nombre_campana}`;
         document.getElementById("modal-campaign-total").textContent =
-            campana.cantidad_total;
+            campana.cantidad_total  ;
         document.getElementById("modal-campaign-progress").textContent =
             campana.cantidad_acordada;
         document.getElementById(
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
         campaignModal.classList.add("hidden");
         campaignModal.classList.remove("flex");
     };
-});
+});*/
 
 /* =======================================================
 // ===== LÓGICA PARA EL MODAL DE EDICIÓN DE LOTE =====
