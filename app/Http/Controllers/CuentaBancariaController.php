@@ -128,24 +128,23 @@ class CuentaBancariaController extends Controller
             ->with('status', '¡Cuenta bancaria eliminada exitosamente!');
     }
 
-    public function setPrimary(Request $request, CuentaBancaria $cuenta_bancaria)
+    public function setPrimary($id)
     {
-        // 1. Verificación de Seguridad: Asegurarnos de que el usuario es dueño de esta cuenta
+        
+        $cuenta_bancaria = CuentaBancaria::findOrFail($id);
+
         if ($cuenta_bancaria->user_id !== Auth::id()) {
             abort(403, 'Acción no autorizada.');
         }
 
-        // 2. Usamos una transacción para asegurar que ambas operaciones funcionen
-        DB::transaction(function () use ($cuenta_bancaria, $request) {
+        DB::transaction(function () use ($cuenta_bancaria) {
+            
+            CuentaBancaria::where('user_id', Auth::id())
+                          ->update(['is_primary' => false]);
 
-            // 3. Primero, ponemos TODAS las cuentas de este usuario como NO principales
-            $request->user()->cuentasBancarias()->update(['is_primary' => false]);
-
-            // 4. Luego, marcamos solo la elegida como SÍ principal
             $cuenta_bancaria->update(['is_primary' => true]);
         });
 
-        // 5. Redirigimos de vuelta con un mensaje de éxito
         return redirect()->route('cuentas-bancarias.index')
             ->with('status', '¡Has cambiado tu cuenta principal exitosamente!');
     }
