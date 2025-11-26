@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 });*/
 
-// =======================================================
+/*/ =======================================================
 // ===== LÓGICA PARA EL MODAL DE APLICAR A CAMPAÑA =====
 // =======================================================
 
@@ -254,4 +254,4 @@ window.closeApplyModal = function () {
         modal.classList.add("hidden");
         modal.classList.remove("flex");
     }
-};
+};*/
