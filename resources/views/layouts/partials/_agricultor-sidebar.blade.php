@@ -10,6 +10,7 @@
             <li><a href="{{ route('lotes.index') }}" class="{{ request()->routeIs('lotes.*') ? 'active' : '' }}"><i class="fas fa-map-marked-alt"></i> Mis Lotes</a></li>            
             <li><a href="{{ route('campanas.mercado') }}" class="{{ request()->routeIs('campanas.mercado') ? 'active' : '' }}"><i class="fas fa-store"></i> Mercado de Campañas</a></li>
             <li><a href="#"><i class="fas fa-chart-bar"></i> Historial de Ventas</a></li>
+            <li><a href="{{ route('cuentas-bancarias.index') }}" class="{{ request()->routeIs('cuentas-bancarias.*') ? 'active' : '' }}"><i class="fas fa-landmark"></i> Mis Cuentas Bancarias</a></li>
             <li><a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}"><i class="fas fa-user"></i> Mi Perfil</a></li>
         </ul>
     </nav>

@@ -1,8 +1,106 @@
-@import "components/_alerts.css";
-@import "components/_modal.css";
-@import "components/_sidebar.css";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+    /* --- PALETA SMARTRICE --- */
+    
+    /* COLORES DE MARCA */
+    --color-primary: #5F7F3B;   /* Verde Campo (Acción Principal) */
+    --color-secondary: #B79C43; /* Amarillo Arroz (Edición/Atención) */
+    
+    /* COLORES FUNCIONALES */
+    --color-success: #28A745;   /* Confirmado/Éxito */
+    --color-danger: #DC3545;    /* Eliminar/Error */
+    --color-info: #17A2B8;      /* En Proceso/Informativo */
+    --color-neutral: #6C757D;   /* Cerrado/Cancelado */
+    
+    /* ESTRUCTURA */
+    --color-bg-body: #F5F5F5;
+    --color-text-main: #333333;
+    --color-white: #ffffff;
+}
 
+body {
+    background-color: var(--color-bg-body);
+    color: var(--color-text-main);
+    font-family: 'Nunito', sans-serif;
+}
 
+/* =========================================
+   BOTONES DE ACCIÓN (CRUD)
+   ========================================= */
+
+/* Estilo Base para todos los botones */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-decoration: none; /* Por si es una etiqueta <a> */
+    color: white;
+    gap: 5px; /* Espacio si pones íconos dentro */
+}
+
+.btn-action:hover {
+    transform: translateY(-1px); /* Efecto leve de elevación */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* -- Botón CONFIRMAR / GUARDAR (Verde Marca) -- */
+.btn-confirm {
+    background-color: var(--color-primary);
+}
+.btn-confirm:hover { background-color: #4b662e; }
+
+/* -- Botón EDITAR (Amarillo) -- */
+.btn-edit {
+    background-color: var(--color-secondary);
+}
+.btn-edit:hover { background-color: #9a8235; }
+
+/* -- Botón ELIMINAR (Rojo) -- */
+.btn-delete {
+    background-color: var(--color-danger);
+}
+.btn-delete:hover { background-color: #bd2130; }
+
+/* =========================================
+   ETIQUETAS DE ESTADO (BADGES)
+   ========================================= */
+
+/* Estilo Base para las etiquetas */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px; /* Bordes totalmente redondeados (tipo píldora) */
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+    text-align: center;
+    min-width: 80px;
+}
+
+/* -- Estado: CONFIRMADO / ACEPTADO -- */
+.status-confirmed {
+    background-color: var(--color-success);
+}
+
+/* -- Estado: EN PROCESO -- */
+.status-process {
+    background-color: var(--color-info);
+}
+
+/* -- Estado: ESPERANDO / PENDIENTE -- */
+.status-waiting {
+    background-color: var(--color-secondary);
+}
+
+/* -- Estado: CERRADO / ANULADO -- */
+.status-closed {
+    background-color: var(--color-neutral);
+}

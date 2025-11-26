@@ -58,4 +58,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function cuentasBancarias()
+    {
+        // Nota: Usamos el namespace completo por si acaso
+        return $this->hasMany(\App\Models\CuentaBancaria::class);
+    }
 }

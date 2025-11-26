@@ -9,17 +9,6 @@ use App\Http\Controllers\CampanaController;
 use App\Http\Controllers\Admin\TipoArrozController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -69,9 +58,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/mis-negociaciones', [PreventaController::class, 'negociaciones'])->name('preventas.negociaciones');
 
     Route::resource('campanas', CampanaController::class);
+    
     Route::resource('lotes', LoteController::class);
 
-    Route::get('/campanas-mercado', [CampanaController::class, 'mercadoParaAgricultores'])->name('campanas.mercado');
+    Route::resource('cuentas-bancarias', \App\Http\Controllers\CuentaBancariaController::class)->except(['show']);
+
+    Route::post('cuentas-bancarias/{cuentaBancaria}/set-primary', [\App\Http\Controllers\CuentaBancariaController::class, 'setPrimary'])->name('cuentas-bancarias.setPrimary');
+
+    Route::get('/mercado-campanas', [CampanaController::class, 'mercadoParaAgricultores'])->name('campanas.mercado');
+
+
     Route::get('/mercado-campanas', [CampanaController::class, 'mercadoParaAgricultores'])->name('campanas.mercado');
 
     Route::get('campanas/{campana}/aplicaciones', [CampanaController::class, 'verAplicaciones'])->name('campanas.aplicaciones');
@@ -80,11 +76,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/campanas/{campana}/aplicar', [CampanaController::class, 'aplicar'])->name('campanas.aplicar');
 
     Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('tipos-arroz', TipoArrozController::class);
-
-    
-});
-    
+        Route::resource('tipos-arroz', TipoArrozController::class);
+    });
 });
 
 require __DIR__ . '/auth.php';
