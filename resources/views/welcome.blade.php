@@ -13,15 +13,26 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        /* Estructura Básica */
+        /* --- VARIABLES GLOBALES (Para que esta página sea independiente) --- */
+        :root {
+            --color-primary: #5F7F3B;   /* Verde Campo */
+            --color-secondary: #B79C43; /* Amarillo Arroz */
+            --color-bg-body: #F5F5F5;
+            --color-text-main: #333333;
+        }
+
+        /* --- RESET BÁSICO --- */
         body {
             background-color: var(--color-bg-body);
+            color: var(--color-text-main);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
             font-family: 'Nunito', sans-serif;
         }
+
+        a { text-decoration: none; }
 
         /* --- NAVBAR --- */
         .navbar {
@@ -40,7 +51,6 @@
             font-size: 1.6rem;
             font-weight: 800;
             color: var(--color-primary);
-            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -53,7 +63,6 @@
         }
 
         .nav-link-text {
-            text-decoration: none;
             color: var(--color-text-main);
             font-weight: 700;
             font-size: 0.95rem;
@@ -61,6 +70,33 @@
             padding: 5px 10px;
         }
         .nav-link-text:hover { color: var(--color-primary); }
+
+        /* --- BOTONES (Esenciales) --- */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            gap: 8px;
+        }
+
+        .btn-confirm {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        .btn-confirm:hover { background-color: #4b662e; transform: translateY(-2px); }
+
+        .btn-edit {
+            background-color: var(--color-secondary);
+            color: white;
+        }
+        .btn-edit:hover { background-color: #9a8235; transform: translateY(-2px); }
 
         /* --- HERO SECTION --- */
         .hero-section {
@@ -150,29 +186,12 @@
             border-top: 1px solid #eee;
         }
 
-        /* --- RESPONSIVE MOBILE (Importante) --- */
+        /* --- RESPONSIVE MOBILE --- */
         @media (max-width: 768px) {
-            /* Navbar en columna */
-            .navbar {
-                flex-direction: column;
-                gap: 1.5rem;
-                padding: 1.5rem;
-            }
+            .navbar { flex-direction: column; gap: 1rem; padding: 1rem; }
+            .nav-links { width: 100%; flex-direction: column; gap: 10px; }
+            .nav-links a { width: 100%; text-align: center; display: block; }
             
-            .nav-links {
-                width: 100%;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            /* Botones full width en celular */
-            .nav-links a {
-                width: 100%;
-                text-align: center;
-                display: block;
-            }
-
-            /* Ajustes de texto */
             .hero-title { font-size: 2rem; }
             .hero-section { padding: 3rem 1.5rem; border-radius: 0 0 30px 30px; }
             .features-container { margin-top: 1rem; }
@@ -202,7 +221,6 @@
                             <i class="fa-solid fa-user-plus"></i> Registrarse
                         </a>
                     @endif
-
                 @endauth
             @endif
         </div>
@@ -217,7 +235,9 @@
         
         @if (Route::has('login'))
             @auth
-                <p style="font-weight: bold; font-size: 1.1rem;">👋 ¡Hola de nuevo!</p>
+                <p style="font-weight: bold; font-size: 1.2rem; background: rgba(255,255,255,0.2); display: inline-block; padding: 5px 15px; border-radius: 20px;">
+                    👋 ¡Hola de nuevo!
+                </p>
             @else
                 <a href="{{ route('login') }}" class="btn-action" style="background: white; color: var(--color-primary); padding: 12px 30px; font-size: 1.1rem;">
                     Ingresar al Sistema <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>

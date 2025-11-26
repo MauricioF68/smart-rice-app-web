@@ -5,49 +5,68 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'SmartRice') }}</title>
 
+        <!-- Fuentes -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=nunito:400,600,700,800&display=swap" rel="stylesheet" />
         
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <!-- Iconos -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+        <!-- Estilos y Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
+    
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <!-- 
+           CONTENEDOR PRINCIPAL
+           Usamos nuestras variables CSS para asegurar el color de fondo correcto 
+        -->
+        <div class="min-h-screen" style="background-color: var(--color-bg-body); color: var(--color-text-main);">
             
-            {{-- Estructura de dos columnas: Sidebar + Contenido Principal --}}
             <div class="flex">
                 
-                {{-- AQUÍ ESTÁ LA LÓGICA PARA LLAMAR AL SIDEBAR CORRECTO --}}
+                {{-- SIDEBAR (BARRA LATERAL) --}}
+                {{-- Nota: Si la barra lateral sigue saliendo oscura, tendremos que editar 
+                     los archivos '_agricultor-sidebar' y '_molino-sidebar' después --}}
                 @if (auth()->user()->rol === 'agricultor')
                     @include('layouts.partials._agricultor-sidebar')
                 @elseif (auth()->user()->rol === 'molino')
                     @include('layouts.partials._molino-sidebar')
                 @endif
                 
-                <div class="flex-1 flex flex-col">
+                {{-- CONTENIDO DERECHO (Navbar + Main) --}}
+                <div class="flex-1 flex flex-col min-h-screen">
+                    
+                    {{-- NAVBAR SUPERIOR (Barra de usuario) --}}
                     @include('layouts.navigation')
 
+                    {{-- HEADER (Título de la página actual) --}}
                     @if (isset($header))
-                        <header class="bg-white dark:bg-gray-800 shadow">
+                        <header class="bg-white shadow-sm border-b border-gray-200">
                             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                                 {{ $header }}
                             </div>
                         </header>
                     @endif
 
-                    <main class="flex-1 overflow-y-auto">
-                        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
-                             @if (session('status'))
-                                <div class="alert alert--success mb-4">
-                                    {{ session('status') }}
+                    {{-- MAIN (El contenido real del Dashboard) --}}
+                    <main class="flex-1 overflow-y-auto p-6">
+                        <div class="max-w-7xl mx-auto">
+                            
+                            {{-- Mensajes de Estado (Alertas Globales) --}}
+                            @if (session('status'))
+                                <div class="mb-6 p-4 rounded-lg bg-green-100 text-green-800 border border-green-200 flex items-center">
+                                    <i class="fas fa-check-circle mr-2"></i> {{ session('status') }}
                                 </div>
                             @endif
+
+                            {{-- Aquí se inyecta el Dashboard --}}
                             {{ $slot }}
                         </div>
                     </main>
+
                 </div>
             </div>
 

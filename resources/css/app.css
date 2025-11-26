@@ -5,4 +5,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* --- VARIABLES GLOBALES DE SMARTRICE --- */
+:root {
+    --color-primary: #5F7F3B;   /* Verde Corporativo */
+    --color-secondary: #B79C43; /* Amarillo Arroz */
+    --color-bg-body: #F5F5F5;   /* Gris Fondo */
+    --color-text-main: #333333; /* Texto Principal */
+}
 
+/* --- CLASES DE UTILIDAD SEGURAS --- */
+/* Usaremos estas clases en tu HTML en lugar de estilos en línea */
+
+/* Fondos */
+.bg-smartrice { background-color: var(--color-primary) !important; }
+.bg-smartrice-dark { background-color: #4b662e !important; } /* Para hovers */
+.bg-rice-yellow { background-color: var(--color-secondary) !important; }
+
+/* Textos */
+.text-smartrice { color: var(--color-primary) !important; }
+.text-rice-yellow { color: var(--color-secondary) !important; }
+
+/* Botones Estándar */
+.btn-smartrice {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem; /* eq. rounded-md */
+    transition: background-color 0.2s;
+    font-weight: 600;
+}
+.btn-smartrice:hover {
+    background-color: #4b662e;
+}
