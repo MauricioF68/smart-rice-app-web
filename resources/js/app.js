@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 });
 
-// =======================================================
+/* =======================================================
 // ===== LÓGICA PARA EL MODAL DE EDICIÓN DE LOTE =====
 // =======================================================
 document.addEventListener("DOMContentLoaded", function () {
@@ -152,9 +152,9 @@ document.addEventListener("DOMContentLoaded", function () {
         loteEditModal.classList.add("hidden");
         loteEditModal.classList.remove("flex");
     };
-});
+});*/
 
-// =======================================================
+/* =======================================================
 // ===== LÓGICA PARA EL MODAL DE DETALLE DE LOTE =====
 // =======================================================
 document.addEventListener("DOMContentLoaded", function () {
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loteDetailModal.classList.add("hidden");
         loteDetailModal.classList.remove("flex");
     };
-});
+});*/
 
 // =======================================================
 // ===== LÓGICA PARA EL MODAL DE APLICAR A CAMPAÑA =====
