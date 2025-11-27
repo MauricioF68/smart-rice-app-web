@@ -6,7 +6,7 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-// =======================================================
+/*/ =======================================================
 // ===== LÓGICA PARA EL MODAL DE DETALLES Y PROPUESTAS =====
 // =======================================================
 document.addEventListener("DOMContentLoaded", function () {
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
             closeProposalModal();
         }
     });
-});
+});*/
 
 /*/ =======================================================
 // ===== LÓGICA PARA EL MODAL DE DETALLE DE CAMPAÑA =====

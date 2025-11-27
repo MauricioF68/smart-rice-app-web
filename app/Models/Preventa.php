@@ -18,6 +18,7 @@ class Preventa extends Model
      */
     protected $fillable = [ // 3. Definir los campos rellenables
         'user_id',
+        'lote_id',
         'cantidad_sacos',
         'precio_por_saco',
         'humedad',

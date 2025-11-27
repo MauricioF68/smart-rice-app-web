@@ -25,7 +25,7 @@ class StorePropuestaRequest extends FormRequest
     {
         return [
             'preventa_id' => ['required', 'integer', 'exists:preventas,id'],
-            'cantidad_sacos_propuesta' => ['required', 'integer', 'min:1'],
+            'cantidad_sacos_propuesta' => ['required', 'numeric', 'min:1'],
             'precio_por_saco_propuesta' => ['required', 'numeric', 'min:0'],
         ];
     }
