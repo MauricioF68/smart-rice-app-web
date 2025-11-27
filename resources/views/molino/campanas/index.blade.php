@@ -59,13 +59,13 @@
                     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                         <div>
                             <h2 class="text-2xl font-bold text-gray-800 flex items-center">
-                                <i class="fas fa-bullhorn mr-3 text-yellow-600"></i> Mis Campañas de Compra
+                                <i class="fas fa-bullhorn mr-3 text-yellow-600"></i> Mis Campañas 
                             </h2>
-                            <p class="text-gray-500 text-sm mt-1">Gestiona tus requerimientos de materia prima.</p>
+                            <p class="text-gray-500 text-sm mt-1">Crea tus campañas y se visible para todos los agricultores.</p>
                         </div>
                         
                         <a href="{{ route('campanas.create') }}" class="btn-new">
-                            <i class="fas fa-plus mr-2"></i> Crear Nueva Campaña
+                            <i class="fas fa-plus mr-2"></i> Crear Campaña
                         </a>
                     </div>
 

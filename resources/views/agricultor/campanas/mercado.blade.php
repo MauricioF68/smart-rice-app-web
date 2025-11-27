@@ -33,7 +33,7 @@
                         <h2 class="text-2xl font-bold text-gray-800 flex items-center">
                             <i class="fas fa-store text-yellow-600 mr-3"></i> Mercado de Campañas
                         </h2>
-                        <p class="text-gray-500 text-sm mt-1">Vende tu arroz directamente a los molinos que buscan tu calidad.</p>
+                        <p class="text-gray-500 text-sm mt-1">Participa ofreciendo directamente tu arroz a los molinos que buscan tu calidad.</p>
                     </div>
 
                     <!-- TABLA -->

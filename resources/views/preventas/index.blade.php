@@ -69,12 +69,12 @@
                     {{-- ENCABEZADO CON EL BOTÓN --}}
                     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-800">Mis Preventas</h2>
-                            <p class="text-gray-500 text-sm mt-1">Gestiona tus ofertas de arroz.</p>
+                            <h2 class="text-2xl font-bold text-gray-800">Mis Ofertas de Arroz</h2>
+                            <p class="text-gray-500 text-sm mt-1">Gestiona tus ofertas de arroz y se visible para todos los molinos</p>
                         </div>
                         
                         <a href="{{ route('preventas.create') }}" class="btn-new">
-                            <i class="fas fa-plus mr-2"></i> Crear Nueva Preventa
+                            <i class="fas fa-plus mr-2"></i> Ofrece tu Arroz
                         </a>
                     </div>
 

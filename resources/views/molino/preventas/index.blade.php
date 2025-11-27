@@ -33,7 +33,7 @@
                 <div class="p-6">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-gray-800 flex items-center">
-                            <i class="fas fa-search-dollar mr-3 text-green-600"></i> Mercado de Preventas
+                            <i class="fas fa-search-dollar mr-3 text-green-600"></i> Mercado de Agricultores
                         </h2>
                         <p class="text-gray-500 text-sm mt-1">Explora las ofertas de los agricultores y haz tu propuesta.</p>
                     </div>

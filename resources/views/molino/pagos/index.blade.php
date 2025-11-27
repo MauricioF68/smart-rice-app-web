@@ -15,10 +15,10 @@
 
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-gray-800 flex items-center">
-                            <i class="fas fa-truck-loading mr-3 text-green-600"></i> Cargas Recibidas / Por Pagar
+                            <i class="fas fa-truck-loading mr-3 text-green-600"></i> Lotes Recibidos y Por Pagar
                         </h2>
                         <p class="text-gray-500 text-sm mt-1">
-                            Listado de cargas que ya pasaron por caseta y están listas para liquidación.
+                            Listado de lotes que ya pasaron por caseta y están listas para hacer el pago respectivo a sus numeros de cuenta.
                         </p>
                     </div>
 

@@ -55,12 +55,12 @@
                     {{-- HEADER --}}
                     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-800">Mis Lotes de Cosecha</h2>
-                            <p class="text-gray-500 text-sm mt-1">Gestiona tu inventario de arroz disponible.</p>
+                            <h2 class="text-2xl font-bold text-gray-800">Mis Lotes </h2>
+                            <p class="text-gray-500 text-sm mt-1">Gestiona tus lotes de arroz que cosechaste esta campaña, asi podras vender a los molinos.</p>
                         </div>
                         
                         <a href="{{ route('lotes.create') }}" class="btn-new">
-                            <i class="fas fa-plus mr-2"></i> Registrar Nuevo Lote
+                            <i class="fas fa-plus mr-2"></i> Registra tu Lote
                         </a>
                     </div>
 

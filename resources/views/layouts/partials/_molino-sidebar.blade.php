@@ -89,29 +89,21 @@
                 <a href="{{ route('campanas.index') }}" class="{{ request()->routeIs('campanas.*') ? 'active' : '' }}">
                     <i class="fas fa-bullhorn"></i> Mis Campañas
                 </a>
-            </li>
+            </li>           
             
-            <li>
-                <a href="#" class="{{ request()->routeIs('compras.*') ? 'active' : '' }}">
-                    <i class="fas fa-shopping-cart"></i> Mis Compras
-                </a>
-            </li>
 
             <li>
                 <a href="{{ route('molino.pagos.index') }}" class="{{ request()->routeIs('molino.pagos.*') ? 'active' : '' }}">
-                    <i class="fas fa-money-bill-wave"></i> Cargas por Pagar
-                </a>
-            </li>
-            
-            <li>
-                <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">
-                    <i class="fas fa-building"></i> Perfil de Empresa
+                    <i class="fas fa-money-bill-wave"></i> Hacer Pagos
                 </a>
             </li>
 
             <li style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
+                    <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">
+                        <i class="fas fa-building"></i> Perfil de Empresa
+                    </a>
                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" style="color: #ffcccc;">
                         <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                     </a>

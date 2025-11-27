@@ -70,7 +70,7 @@
                 
                 <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                     <div>
-                        <h2 class="text-xl font-bold text-gray-800">Crear Nueva Preventa</h2>
+                        <h2 class="text-xl font-bold text-gray-800">Crear Tu Oferta</h2>
                         <p class="text-sm text-gray-500">Define el lote y el precio para recibir ofertas.</p>
                     </div>
                     <a href="{{ route('preventas.index') }}" class="text-gray-400 hover:text-gray-600">
