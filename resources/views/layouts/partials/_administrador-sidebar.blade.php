@@ -94,6 +94,18 @@
                     <i class="fas fa-seedling"></i> Tipos de Arroz
                 </a>
             </li>
+            {{-- GESTIÓN DE CASETAS --}}
+            <li>
+                <a href="{{ route('admin.casetas.index') }}" class="{{ request()->routeIs('admin.casetas.*') ? 'active' : '' }}">
+                    <i class="fas fa-warehouse"></i> Gestión de Casetas
+                </a>
+            </li>
+            {{-- GESTIÓN DE USUARIOS CASETA --}}
+            <li>
+            <a href="{{ route('admin.usuarios-caseta.index') }}" class="{{ request()->routeIs('admin.usuarios-caseta.*') ? 'active' : '' }}">
+                <i class="fas fa-users-cog"></i> Operarios Caseta
+            </a>
+        </li>
 
             {{-- Espaciador para separar gestión de cuenta --}}
             <li style="margin-top: 2rem;"></li>

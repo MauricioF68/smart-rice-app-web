@@ -96,6 +96,12 @@
                     <i class="fas fa-shopping-cart"></i> Mis Compras
                 </a>
             </li>
+
+            <li>
+                <a href="{{ route('molino.pagos.index') }}" class="{{ request()->routeIs('molino.pagos.*') ? 'active' : '' }}">
+                    <i class="fas fa-money-bill-wave"></i> Cargas por Pagar
+                </a>
+            </li>
             
             <li>
                 <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">

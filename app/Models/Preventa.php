@@ -44,4 +44,13 @@ class Preventa extends Model
     {
         return $this->hasMany(\App\Models\Propuesta::class);
     }
+    public function analisisCalidad()
+    {
+        // Usamos hasOne porque cada preventa tiene un solo análisis final
+        return $this->hasOne(\App\Models\AnalisisCalidad::class);
+    }
+    public function pago()
+    {
+        return $this->hasOne(\App\Models\Pago::class);
+    }
 }

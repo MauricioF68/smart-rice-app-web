@@ -29,7 +29,23 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // AQUÍ ESTÁ EL CAMBIO:
+        // En lugar de "return redirect()->intended(RouteServiceProvider::HOME);"
+        // Vamos a preguntar qué rol tiene el usuario.
+
+        $rol = auth()->user()->rol;
+
+        if ($rol === 'admin' || $rol === 'administrador') {
+            return redirect()->intended(route('dashboard')); // O admin.dashboard si tienes uno específico
+        }
+
+        if ($rol === 'caseta') {
+            // ¡Al operario lo mandamos a seleccionar su caseta!
+            return redirect()->route('caseta.seleccion');
+        }
+
+        // Agricultores y Molinos van al dashboard normal
+        return redirect()->intended(route('dashboard'));
     }
 
     /**

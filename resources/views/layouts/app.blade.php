@@ -41,6 +41,12 @@
                     {{-- Comprobamos 'admin' o 'administrador' por seguridad --}}
                     @elseif (auth()->user()->rol === 'admin' || auth()->user()->rol === 'administrador')
                         @include('layouts.partials._administrador-sidebar')
+                    {{-- NUEVO: Sidebar para Caseta --}}
+                    @elseif (auth()->user()->rol === 'caseta')
+                        {{-- Solo mostramos el sidebar si ya eligió ubicación --}}
+                        @if(session()->has('caseta_activa'))
+                            @include('layouts.partials._caseta-sidebar')
+                            @endif
                     @endif
                 @endauth
                 

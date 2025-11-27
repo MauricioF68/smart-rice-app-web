@@ -6,8 +6,11 @@ use App\Http\Controllers\PreventaController;
 use App\Http\Controllers\PropuestaController;
 use App\Http\Controllers\LoteController;
 use App\Http\Controllers\CampanaController;
+use \App\Http\Controllers\Agricultor\AnalisisController;
+use App\Http\Controllers\Admin\CasetaController;
 use App\Http\Controllers\Admin\TipoArrozController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -60,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('campanas', CampanaController::class);
     
     Route::resource('lotes', LoteController::class);
+    Route::get('/mis-liquidaciones', [\App\Http\Controllers\Agricultor\PagoController::class, 'index'])->name('agricultor.pagos.index');
 
     Route::resource('cuentas-bancarias', \App\Http\Controllers\CuentaBancariaController::class)->except(['show']);
 
@@ -75,9 +79,42 @@ Route::middleware('auth')->group(function () {
     Route::post('aplicaciones/{aplicacion}/rechazar', [CampanaController::class, 'rechazarAplicacion'])->name('aplicaciones.rechazar');
     Route::post('/campanas/{campana}/aplicar', [CampanaController::class, 'aplicar'])->name('campanas.aplicar');
 
+    Route::get('/mis-certificados', [AnalisisController::class, 'index'])->name('agricultor.analisis.index');
+
+    Route::get('/mis-pagos', [\App\Http\Controllers\Molino\PagoController::class, 'index'])->name('molino.pagos.index');
+    Route::get('/pagar-carga/{id}', [\App\Http\Controllers\Molino\PagoController::class, 'create'])->name('molino.pagos.create');
+    Route::post('/pagar-carga/{id}', [\App\Http\Controllers\Molino\PagoController::class, 'store'])->name('molino.pagos.store');
+
+
+    //Rutas para el administrador
     Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+
         Route::resource('tipos-arroz', TipoArrozController::class);
+
+        Route::resource('casetas', CasetaController::class);
+
+        Route::resource('usuarios-caseta', \App\Http\Controllers\Admin\CasetaUsuarioController::class);
+                                   
     });
+});
+
+// --- RUTAS OPERATIVAS DE CASETA ---
+Route::middleware(['auth', 'verified'])->prefix('caseta')->name('caseta.')->group(function () {
+    
+    // 1. Pantalla de Selección (Donde pone el código)
+    Route::get('/seleccion', [\App\Http\Controllers\Caseta\OperacionesController::class, 'showSelector'])->name('seleccion');
+
+    // 2. Proceso de validación del código
+    Route::post('/seleccionar', [\App\Http\Controllers\Caseta\OperacionesController::class, 'setCaseta'])->name('set');
+
+    // 3. Dashboard Operativo (Donde trabajará)
+    Route::get('/dashboard', [\App\Http\Controllers\Caseta\OperacionesController::class, 'dashboard'])->name('dashboard');
+    
+    Route::get('/recepcion', [\App\Http\Controllers\Caseta\OperacionesController::class, 'recepcion'])->name('recepcion');
+
+    Route::get('/evaluar/{id}', [\App\Http\Controllers\Caseta\OperacionesController::class, 'evaluar'])->name('evaluar');
+
+    Route::post('/evaluar/{id}', [\App\Http\Controllers\Caseta\OperacionesController::class, 'guardarAnalisis'])->name('guardar-analisis');
 });
 
 require __DIR__ . '/auth.php';

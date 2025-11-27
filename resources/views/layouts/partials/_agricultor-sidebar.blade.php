@@ -86,10 +86,16 @@
                     <i class="fas fa-home"></i> Dashboard
                 </a>
             </li>
+
+            <li>
+                <a href="{{ route('lotes.index') }}" class="{{ request()->routeIs('lotes.*') ? 'active' : '' }}">
+                    <i class="fas fa-map-location-dot"></i> Mis Lotes
+                </a>
+            </li>
             
             <li>
                 <a href="{{ route('preventas.index') }}" class="{{ request()->routeIs('preventas.*') ? 'active' : '' }}">
-                    <i class="fas fa-hand-holding-dollar"></i> Mis Preventas
+                    <i class="fas fa-hand-holding-dollar"></i> Vender Arroz
                 </a>
             </li>
             
@@ -99,27 +105,30 @@
                 </a>
             </li>
             
-            <li>
-                <a href="{{ route('lotes.index') }}" class="{{ request()->routeIs('lotes.*') ? 'active' : '' }}">
-                    <i class="fas fa-map-location-dot"></i> Mis Lotes
-                </a>
-            </li>           
+                       
             
             <li>
                 <a href="{{ route('campanas.mercado') }}" class="{{ request()->routeIs('campanas.mercado') ? 'active' : '' }}">
-                    <i class="fas fa-store"></i> Mercado de Campañas
+                    <i class="fas fa-store"></i> Propuesta de Molinos
                 </a>
-            </li>
+            </li>           
+            
             
             <li>
-                <a href="#" class="{{ request()->routeIs('historial.*') ? 'active' : '' }}">
-                    <i class="fas fa-chart-line"></i> Historial de Ventas
+                <a href="{{ route('agricultor.analisis.index') }}" class="{{ request()->routeIs('agricultor.analisis.*') ? 'active' : '' }}">
+                    <i class="fas fa-certificate"></i> Certificados de Calidad
                 </a>
             </li>
-            
+
             <li>
                 <a href="{{ route('cuentas-bancarias.index') }}" class="{{ request()->routeIs('cuentas-bancarias.*') ? 'active' : '' }}">
                     <i class="fas fa-university"></i> Cuentas Bancarias
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('agricultor.pagos.index') }}" class="{{ request()->routeIs('agricultor.pagos.*') ? 'active' : '' }}">
+                    <i class="fas fa-wallet"></i> Mis Pagos                
                 </a>
             </li>
             
