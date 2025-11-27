@@ -30,11 +30,19 @@
                 {{-- SIDEBAR (BARRA LATERAL) --}}
                 {{-- Nota: Si la barra lateral sigue saliendo oscura, tendremos que editar 
                      los archivos '_agricultor-sidebar' y '_molino-sidebar' después --}}
-                @if (auth()->user()->rol === 'agricultor')
-                    @include('layouts.partials._agricultor-sidebar')
-                @elseif (auth()->user()->rol === 'molino')
-                    @include('layouts.partials._molino-sidebar')
-                @endif
+                @auth
+                    @if (auth()->user()->rol === 'agricultor')
+                        @include('layouts.partials._agricultor-sidebar')
+
+                    @elseif (auth()->user()->rol === 'molino')
+                        @include('layouts.partials._molino-sidebar')
+
+                    {{-- NUEVO: Validación para Administrador --}}
+                    {{-- Comprobamos 'admin' o 'administrador' por seguridad --}}
+                    @elseif (auth()->user()->rol === 'admin' || auth()->user()->rol === 'administrador')
+                        @include('layouts.partials._administrador-sidebar')
+                    @endif
+                @endauth
                 
                 {{-- CONTENIDO DERECHO (Navbar + Main) --}}
                 <div class="flex-1 flex flex-col min-h-screen">
