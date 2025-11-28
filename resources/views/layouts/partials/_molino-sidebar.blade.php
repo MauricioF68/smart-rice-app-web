@@ -90,7 +90,11 @@
                     <i class="fas fa-bullhorn"></i> Mis Campañas
                 </a>
             </li>           
-            
+            <li>
+                <a href="{{ route('molino.logistica.index') }}" class="{{ request()->routeIs('molino.logistica.*') ? 'active' : '' }}">
+                    <i class="fas fa-route"></i> Programar Recojos
+                </a>
+            </li>
 
             <li>
                 <a href="{{ route('molino.pagos.index') }}" class="{{ request()->routeIs('molino.pagos.*') ? 'active' : '' }}">

@@ -102,10 +102,11 @@
             </li>
             {{-- GESTIÓN DE USUARIOS CASETA --}}
             <li>
-            <a href="{{ route('admin.usuarios-caseta.index') }}" class="{{ request()->routeIs('admin.usuarios-caseta.*') ? 'active' : '' }}">
-                <i class="fas fa-users-cog"></i> Operarios Caseta
-            </a>
-        </li>
+                <a href="{{ route('admin.usuarios-caseta.index') }}" class="{{ request()->routeIs('admin.usuarios-caseta.*') ? 'active' : '' }}">
+                    <i class="fas fa-users-cog"></i> Operarios Caseta
+                </a>
+            </li>            
+
 
             {{-- Espaciador para separar gestión de cuenta --}}
             <li style="margin-top: 2rem;"></li>

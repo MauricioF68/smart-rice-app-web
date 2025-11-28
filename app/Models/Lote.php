@@ -23,6 +23,9 @@ class Lote extends Model
         'humedad',
         'quebrado',
         'estado',
+        'latitud',
+        'longitud',
+        'referencia_ubicacion',
     ];
 
     /**

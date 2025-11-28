@@ -27,6 +27,8 @@ class User extends Authenticatable
     'rol',
     'telefono',
     'direccion',
+    'latitud',  
+    'longitud',
     'estado',
     'primer_nombre',
     'segundo_nombre',

@@ -202,12 +202,12 @@ class CampanaController extends Controller
         // Cargamos las relaciones para acceder a sus datos
         $aplicacion->load('campana', 'lote');
 
-        // 1. Verificación de seguridad: El usuario autenticado debe ser el dueño de la campaña.
+        // 1. Verificación de seguridad
         if ($aplicacion->campana->user_id !== auth()->id()) {
             abort(403, 'Acción no autorizada.');
         }
 
-        // 2. Verificación de negocio: El estado debe ser 'pendiente_aprobacion'.
+        // 2. Verificación de negocio
         if ($aplicacion->estado !== 'pendiente_aprobacion') {
             return back()->with('status', 'Error: Esta aplicación ya ha sido procesada.');
         }
@@ -216,46 +216,67 @@ class CampanaController extends Controller
         $lote = $aplicacion->lote;
         $cantidadAprobada = $aplicacion->cantidad_comprometida;
 
-        // 3. Verificación de capacidad: La campaña debe tener suficiente espacio.
+        // 3. Verificación de capacidad
         $espacioDisponible = $campana->cantidad_total - $campana->cantidad_acordada;
         if ($cantidadAprobada > $espacioDisponible) {
-            return back()->with('status', 'Error: No hay suficiente espacio en la campaña para aceptar esta cantidad.');
+            return back()->with('status', 'Error: No hay suficiente espacio en la campaña.');
         }
 
-        // 4. Verificación de disponibilidad: El lote del agricultor aún debe tener sacos suficientes.
+        // 4. Verificación de disponibilidad del agricultor
         if ($cantidadAprobada > $lote->cantidad_disponible_sacos) {
-            // Si no hay sacos, rechazamos automáticamente la aplicación.
             $aplicacion->update(['estado' => 'rechazada']);
-            return back()->with('status', 'Error: El agricultor ya no tiene suficientes sacos en este lote. La aplicación ha sido rechazada.');
+            return back()->with('status', 'Error: El agricultor ya no tiene suficientes sacos.');
         }
 
         // --- INICIO DE LA TRANSACCIÓN ---
-        // Si algo falla aquí, todo se revierte automáticamente.
         try {
             DB::beginTransaction();
 
-            // A. Actualizar el estado de la aplicación
+            // A. Actualizar estado en campana_lote
             $aplicacion->update(['estado' => 'aprobada']);
 
-            // B. Descontar los sacos del lote del agricultor
+            // B. Descontar sacos del lote
             $lote->decrement('cantidad_disponible_sacos', $cantidadAprobada);
 
-            // C. Aumentar los sacos acordados en la campaña del molino
+            // C. Aumentar sacos acordados en la campaña
             $campana->increment('cantidad_acordada', $cantidadAprobada);
 
-            // Si todo ha ido bien, confirmamos los cambios
+            // -------------------------------------------------------
+            // D. [NUEVO] CREAR EL PUENTE (PREVENTA AUTOMÁTICA)
+            // -------------------------------------------------------
+            // Creamos una Preventa "Espejo" ya en estado 'acordada'
+            $preventa = \App\Models\Preventa::create([
+                'user_id' => $lote->user_id, // El Agricultor
+                'lote_id' => $lote->id,      // Su lote
+                'cantidad_sacos' => $cantidadAprobada,
+                'precio_por_saco' => $campana->precio_base, // Precio de la campaña
+                'humedad' => $lote->humedad,
+                'quebrado' => $lote->quebrado,
+                'notas' => 'Acuerdo automático desde Campaña #' . $campana->id,
+                'estado' => 'acordada', // ¡Esto la hace visible en Logística!
+            ]);
+
+            // E. [NUEVO] CREAR LA PROPUESTA GANADORA
+            // Para que el sistema sepa qué Molino ganó (Tú)
+            \App\Models\Propuesta::create([
+                'preventa_id' => $preventa->id,
+                'user_id' => auth()->id(), // Tú (El Molino)
+                'cantidad_sacos_propuesta' => $cantidadAprobada,
+                'precio_por_saco_propuesta' => $campana->precio_base,
+                'estado' => 'aceptada', // ¡Esto confirma que tú eres el comprador!
+            ]);
+            // -------------------------------------------------------
+
             DB::commit();
         } catch (\Exception $e) {
-            // Si hubo un error, revertimos todo
             DB::rollBack();
-            // Podríamos registrar el error: \Log::error($e->getMessage());
-            return back()->with('status', 'Error: Ocurrió un problema al procesar la solicitud. Inténtalo de nuevo.');
+            // \Log::error($e->getMessage()); // Útil para debug si falla
+            return back()->with('status', 'Error al procesar: ' . $e->getMessage());
         }
         // --- FIN DE LA TRANSACCIÓN ---
 
-
         return redirect()->route('campanas.aplicaciones', $campana->id)
-            ->with('status', '¡Aplicación aprobada exitosamente! Los inventarios han sido actualizados.');
+            ->with('status', '¡Aplicación aprobada! Se ha generado la orden logística automáticamente.');
     }
 
     // ... después del método aprobarAplicacion()

@@ -53,4 +53,8 @@ class Preventa extends Model
     {
         return $this->hasOne(\App\Models\Pago::class);
     }
+    public function recojo()
+    {
+        return $this->hasOne(\App\Models\Recojo::class);
+    }
 }

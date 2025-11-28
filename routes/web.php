@@ -82,8 +82,30 @@ Route::middleware('auth')->group(function () {
     Route::get('/mis-certificados', [AnalisisController::class, 'index'])->name('agricultor.analisis.index');
 
     Route::get('/mis-pagos', [\App\Http\Controllers\Molino\PagoController::class, 'index'])->name('molino.pagos.index');
+
     Route::get('/pagar-carga/{id}', [\App\Http\Controllers\Molino\PagoController::class, 'create'])->name('molino.pagos.create');
     Route::post('/pagar-carga/{id}', [\App\Http\Controllers\Molino\PagoController::class, 'store'])->name('molino.pagos.store');
+
+    
+    Route::get('/mis-recojos', [\App\Http\Controllers\Molino\LogisticaController::class, 'index'])
+        ->name('molino.logistica.index');
+
+    
+    Route::get('/configurar-ubicacion', [\App\Http\Controllers\Molino\LogisticaController::class, 'configurar'])
+        ->name('molino.logistica.configurar');
+        
+    Route::post('/configurar-ubicacion', [\App\Http\Controllers\Molino\LogisticaController::class, 'guardarUbicacion'])
+        ->name('molino.logistica.guardar');
+
+   
+    Route::get('/programar-recojo/{id}', [\App\Http\Controllers\Molino\LogisticaController::class, 'programar'])
+        ->name('molino.logistica.programar');
+    
+    Route::post('/programar-recojo/{id}', [\App\Http\Controllers\Molino\LogisticaController::class, 'store'])
+        ->name('molino.logistica.store');
+    
+    Route::get('/detalle-recojo/{id}', [\App\Http\Controllers\Molino\LogisticaController::class, 'detalle'])
+        ->name('molino.logistica.detalle');
 
 
     //Rutas para el administrador

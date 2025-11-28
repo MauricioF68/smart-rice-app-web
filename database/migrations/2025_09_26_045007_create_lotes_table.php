@@ -13,22 +13,21 @@ return new class extends Migration
     {
         Schema::create('lotes', function (Blueprint $table) {
             $table->id();
-
-            // Foreign key to the farmer (user) who owns this lot
+            
             $table->foreignId('user_id')->constrained('users');
 
-            // You could also link to a specific 'hectarea' if you create that module later
-            // $table->foreignId('hectarea_id')->constrained('hectareas');
-
-            $table->string('nombre_lote'); // e.g., "Cosecha Principal 2025"
+            $table->string('nombre_lote'); 
             $table->integer('cantidad_total_sacos');
-            $table->integer('cantidad_disponible_sacos'); // This will decrease as the farmer makes deals
-
-            // Farmer's self-assessed quality parameters
+            $table->integer('cantidad_disponible_sacos'); 
+            
             $table->decimal('humedad', 5, 2);
             $table->decimal('quebrado', 5, 2);
 
-            $table->string('estado')->default('disponible'); // 'disponible', 'agotado'
+            $table->decimal('latitud', 10, 8)->nullable(); 
+            $table->decimal('longitud', 11, 8)->nullable();
+            $table->string('referencia_ubicacion')->nullable();
+
+            $table->string('estado')->default('disponible'); 
 
             $table->timestamps();
             $table->softDeletes();

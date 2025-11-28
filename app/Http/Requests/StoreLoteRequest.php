@@ -19,6 +19,9 @@ class StoreLoteRequest extends FormRequest
             'cantidad_total_sacos' => ['required', 'integer', 'min:1'],
             'humedad' => ['required', 'numeric', 'min:0'],
             'quebrado' => ['required', 'numeric', 'min:0'],
+            'latitud' => 'nullable|numeric',
+            'longitud' => 'nullable|numeric',
+            'referencia_ubicacion' => 'nullable|string|max:255',
         ];
     }
 }
